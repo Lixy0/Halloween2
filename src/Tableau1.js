@@ -352,12 +352,12 @@ class Tableau1 extends Phaser.Scene{
          * Arbre tombé droite
          * @type {Phaser.GameObjects.Image}
          */
-        let ftree=this.add.image(1410,370, 'gftree1').setOrigin(0,1);
-        this.groundContainer.add(ftree);
-        ftree.scaleY=1
-        ftree.scaleX=0.8
-        ftree.setAngle(7)
-        ftree.flipX = false
+        let gftree=this.add.image(1410,370, 'gftree1').setOrigin(0,1);
+        this.groundContainer.add(gftree);
+        gftree.scaleY=1
+        gftree.scaleX=0.8
+        gftree.setAngle(7)
+        gftree.flipX = false
 
         // lianne DROITE
         let vine101d=this.add.image(1800,-10, 'gLiane3').setOrigin(0,0);
