@@ -48,6 +48,10 @@ class Tableau1 extends Phaser.Scene{
             this.load.image('filterFilm' + i, 'assets/level/filters/film/frame-' + i + '.png');
 
         }
+        for(let i=1;i<=3;i++) {
+            this.load.image('bloody' + i, 'assets/level/filters/bloody/frame' + i + '.png');
+
+        }
 
         //texture au fond  TODO élève : faire une boucle pour charger les 3 images et démontrer par la même que vous savez aller au plus simple
         for(let i=1;i<=3;i++) {
@@ -331,6 +335,12 @@ class Tableau1 extends Phaser.Scene{
         gMidD.scaleX=2
         let gRightDD=this.add.image(1250,360, 'gRight').setOrigin(0,0);
         this.groundContainer.add(gRightDD);
+        let gLeftDD=this.add.image(1750,380, 'gLeft').setOrigin(0,0);
+        this.groundContainer.add(gLeftDD);
+        let gMidDD=this.add.image(1940,380, 'gMid').setOrigin(0,0);
+        this.groundContainer.add(gMidDD);
+        gMidDD.scaleY=1
+        gMidDD.scaleX=6
         /** STONE droite
         * @type {Phaser.GameObjects.Image}
         */
@@ -356,7 +366,7 @@ class Tableau1 extends Phaser.Scene{
         this.groundContainer.add(gftree);
         gftree.scaleY=1
         gftree.scaleX=0.8
-        gftree.setAngle(7)
+        gftree.setAngle(6)
         gftree.flipX = false
 
         // lianne DROITE
@@ -392,19 +402,21 @@ class Tableau1 extends Phaser.Scene{
          * filtre type film au premier plan
          * @type {Phaser.GameObjects.Sprite}
          */
-        this.filterFilm = this.add.sprite(0, 0, 'filterFilm1').setOrigin(0,0);
+
+        this.filterFilm = this.add.sprite(0, 0, 'bloody1').setOrigin(0,0);
         //animation de 3 images
         this.anims.create({
-            key: 'film',
+            key: 'bloody',
             frames: [
-                {key:'filterFilm1'},
-                {key:'filterFilm2'},
-                {key:'filterFilm3'},
+                {key:'bloody1'},
+                {key:'bloody2'},
+                {key:'bloody3'},
             ],
             frameRate: 16,
             repeat: -1
         });
-        this.filterFilm.play('film');
+        this.filterFilm.play('bloody');
+
 
         //TODO élève faire une animation du même genre que filter mais pour bgAnimationA
 
