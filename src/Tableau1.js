@@ -66,11 +66,11 @@ class Tableau1 extends Phaser.Scene {
         //boucle perso idle
         for (let i = 1; i <= 10; i++) {
             this.load.image('boy_idle' + i, 'assets/characters/boy/boy_style_1/PNG/idle/Layer-' + i + '.png');
-            this.load.image('idle2' + i, 'assets/characters/boy/boy_style_1/PNG/idle2/Layer-' + i + '.png');
+            this.load.image('boy_idle2' + i, 'assets/characters/boy/boy_style_1/PNG/idle2/Layer-' + i + '.png');
         }
         //boucle perso run
         for (let i = 1; i <= 8; i++) {
-            this.load.image('run' + i, 'assets/characters/boy/boy_style_1/PNG/run/Layer-' + i + '.png');
+            this.load.image('boy_run' + i, 'assets/characters/boy/boy_style_1/PNG/run/Layer-' + i + '.png');
         }
     }
 
@@ -79,6 +79,19 @@ class Tableau1 extends Phaser.Scene {
      * TODO élèves : reproduire à l'identique assets/level/00-preview-example/sample1.jpg
      * TODO élèves : plus tard, continuez le décor vers la droite en vous servant des assets mis à votre disposition
      */
+    /**
+     * Renvoie un tableau d'images
+     * @param prefix
+     * @param length
+     * @returns {*[]}
+     */
+    getFrames(prefix,length){
+        let frames=[];
+        for (let i=1;i<=length;i++){
+            frames.push({key: prefix+i});
+        }
+        return frames;
+    }
     create() {
 
         /**
@@ -410,19 +423,7 @@ class Tableau1 extends Phaser.Scene {
             let vine107d = this.add.image(1805, 170, 'gLiane2').setOrigin(0, 0);
             this.groundContainer.add(vine107d);
             vine107d.scale = 0.7
-        /**
-         * @type {Phaser.GameObjects.Sprite}
-         */
-        this.boy_idle = this.add.sprite(100, 160, 'idle1.').setOrigin(0,0);
-        this.anims.create({
-            key: 'idle',
-            frames: this.getFrames('idle1.', 10),
-            frameRate: 12,
-            repeat: -1
-        });
-        this.boy_idle.play('idle');
-        this.boy_idle.scale = 0.5
-        this.boy_idle.body.setSize(100,250)
+
 
 
             /**
@@ -443,6 +444,39 @@ class Tableau1 extends Phaser.Scene {
                 repeat: -1
             });
             this.filterFilm.play('bloody');
+///---------------------------------------------------IDLE
+
+        this.boy_idle = this.add.sprite(100, 160, 'boy_idle').setOrigin(0,0);
+        this.anims.create({
+            key: 'idle',
+            frames: this.getFrames('boy_idle', 10),
+            frameRate: 12,
+            repeat: -1
+        });
+        this.boy_idle.play('idle');
+        this.boy_idle.scale = 0.5
+///----IDLE 2
+        this.boy_idle2 = this.add.sprite(100, 160, 'boy_idle2').setOrigin(0,0);
+        this.anims.create({
+            key: 'idle2',
+            frames: this.getFrames('boy_idle2', 10),
+            frameRate: 12,
+            repeat: -1,
+            repeatDelay: 980,
+        });
+        this.boy_idle2.play('idle2');
+        this.boy_idle2.scale = 0.5
+///---------------------------------------------------RUN
+        this.boy_run = this.add.sprite(100, 160, 'boy_run').setOrigin(0,0);
+        this.anims.create({
+            key: 'run',
+            frames: this.getFrames('boy_run', 8),
+            frameRate: 12,
+            repeat: -1
+        });
+        this.boy_run.play('run');
+        this.boy_run.scale = 0.5
+        this.boy_run.visible=false
 
 
 
@@ -455,6 +489,8 @@ class Tableau1 extends Phaser.Scene {
              * @type {number}
              */
             this.speed = 0;
+            this.boy_run.speed=0
+            this.start=0
             //initialise ce qui se passe avec le clavier
             this.initKeyboard();
             // Définit l'espace de déplacement de la caméra
@@ -465,6 +501,7 @@ class Tableau1 extends Phaser.Scene {
             this.bg2Container.scrollFactorX = 0.4;
             this.bg1Container.scrollFactorX = 0.8;
             this.groundContainer.scrollFactorX = 2;
+            this.cameras.main.startFollow(this.boy_run)
         }
 
 
@@ -475,30 +512,49 @@ class Tableau1 extends Phaser.Scene {
         initKeyboard()
         {
             let me = this;
-            this.input.keyboard.on('keydown', function (kevent) {
-                switch (kevent.keyCode) {
-                    case Phaser.Input.Keyboard.KeyCodes.Q:
-                        me.speed = -5;
-                        break;
-                    case Phaser.Input.Keyboard.KeyCodes.D:
-                        me.speed = 5;
+
+            this.input.keyboard.on('keydown', function (kevent)
+            {
+                switch (kevent.keyCode)
+                {
+                    case Phaser.Input.Keyboard.KeyCodes.RIGHT:
+                        me.speed = 1;
+                        me.boy_idle.visible=false
+                        me.boy_idle2.visible=false
+                        me.boy_run.visible=true
+                        me.boy_run.speed=2
+                        me.boy_idle.flipX=true
+                        me.boy_idle2.flipX=true
+                        me.boy_run.flipX=false
                         break;
                     case Phaser.Input.Keyboard.KeyCodes.LEFT:
-                        me.speed = -5;
-                        break;
-                    case Phaser.Input.Keyboard.KeyCodes.RIGHT:
-                        me.speed = 5;
+                        me.speed = -1;
+                        me.boy_idle.visible=false
+                        me.boy_idle2.visible=false
+                        me.boy_run.visible=true
+                        me.boy_run.speed=-2
+                        me.boy_idle.flipX=true
+                        me.boy_idle2.flipX=true
+                        me.boy_run.flipX=true
                         break;
                 }
             });
             this.input.keyboard.on('keyup', function (kevent) {
                 switch (kevent.keyCode) {
-                    case Phaser.Input.Keyboard.KeyCodes.Q:
-                    case Phaser.Input.Keyboard.KeyCodes.D:
-                        me.speed = 0;
+                    case Phaser.Input.Keyboard.KeyCodes.RIGHT:
+                        me.boy_run.visible=false
+                        me.boy_run.speed=0
+                        me.boy_idle.visible=true
+                        me.boy_idle2.visible=true
+                        me.boy_idle.flipX=false
+                        me.boy_idle2.flipX=false
+                        me.boy_run.flipX=false
                         break;
                     case Phaser.Input.Keyboard.KeyCodes.LEFT:
-                    case Phaser.Input.Keyboard.KeyCodes.RIGHT:
+                        me.boy_run.visible=false
+                        me.boy_run.speed=0
+                        me.boy_idle.visible=true
+                        me.boy_idle2.visible=true
                         me.speed = 0;
                         break;
                 }
@@ -511,7 +567,11 @@ class Tableau1 extends Phaser.Scene {
         update()
         {
             //déplacement de la caméra
-            this.cameras.main.scrollX += this.speed; // on aurait pu écrire : this.cameras.main.scrollX= this.cameras.main.scrollX + this.speed;
+            this.boy_run.x+=this.boy_run.speed;
+            this.boy_idle.x=this.boy_run.x;
+            this.boy_idle2.x=this.boy_run.x;
+
+
 
             //petit effet de vibrance sur le filtre film au tout premier plan
             this.filterFilm.setAlpha(Phaser.Math.Between(95, 100) / 100)
