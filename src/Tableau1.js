@@ -410,7 +410,19 @@ class Tableau1 extends Phaser.Scene {
             let vine107d = this.add.image(1805, 170, 'gLiane2').setOrigin(0, 0);
             this.groundContainer.add(vine107d);
             vine107d.scale = 0.7
-
+        /**
+         * @type {Phaser.GameObjects.Sprite}
+         */
+        this.boy_idle = this.add.sprite(100, 160, 'idle1.').setOrigin(0,0);
+        this.anims.create({
+            key: 'idle',
+            frames: this.getFrames('idle1.', 10),
+            frameRate: 12,
+            repeat: -1
+        });
+        this.boy_idle.play('idle');
+        this.boy_idle.scale = 0.5
+        this.boy_idle.body.setSize(100,250)
 
 
             /**
